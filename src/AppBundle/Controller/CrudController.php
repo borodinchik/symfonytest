@@ -56,7 +56,7 @@ class CrudController extends Controller
 
         if (empty($name) || empty($email) || empty($company))
         {
-            return new View('NULL VALUES ARE NOT ALLOWED');
+            return new View('NULL VALUES ARE NOT ALLOWED', null, ['Content-type' => 'application/json']);
         }
 
         $data->setUserName($name);
@@ -66,7 +66,7 @@ class CrudController extends Controller
         $em->persist($data);
         $em->flush();
 
-        return new View('User Added Successfully');
+        return new View('User Added Successfully', Response::HTTP_CREATED, ['Content-type' => 'application/json']);
     }
 
     /**
@@ -100,21 +100,21 @@ class CrudController extends Controller
         {
             $user->setUserName($name);
             $em->flush();
-            return new View('User name Updated Successfully', Response::HTTP_OK);
+            return new View('User name Updated Successfully', Response::HTTP_OK, ['Content-type' => 'application/json']);
         }
         elseif (empty($name) && !empty($email) && empty($company))
         {
             $user->setEmail($email);
             $em->flush();
-            return new View('Email Updated Successfully', Response::HTTP_OK);
+            return new View('Email Updated Successfully', Response::HTTP_OK, ['Content-type' => 'application/json']);
         }
         elseif (empty($name) && empty($email) && !empty($company))
         {
             $user->setEmail($company);
             $em->flush();
-            return new View('Company Updated Successfully', Response::HTTP_OK);
+            return new View('Company Updated Successfully', Response::HTTP_OK, ['Content-type' => 'application/json']);
         }
-        else return new View('User name or email and company cannot be empty', Response::HTTP_NOT_ACCEPTABLE);
+        else return new View('User name or email and company cannot be empty', Response::HTTP_NOT_ACCEPTABLE, ['Content-type' => 'application/json']);
     }
 
     /**
