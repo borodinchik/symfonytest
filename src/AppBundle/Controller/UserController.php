@@ -20,8 +20,7 @@ class CrudController extends Controller
     public function getAllUsersAction()
     {
         $data = $this->getDoctrine()->getRepository(User::class)->findAll();
-//        $dataJson = json_encode($data);
-        
+
         if ($data === null)
         {
             return new View('There are no users exist', Response::HTTP_NOT_FOUND);
@@ -66,11 +65,11 @@ class CrudController extends Controller
         $em->persist($data);
         $em->flush();
 
-        return new View('User Added Successfully', Response::HTTP_CREATED, ['Content-type' => 'application/json']);
+        return new View('User Added Successfully', Response::HTTP_OK , ['Content-type' => 'application/json']);
     }
 
     /**
-     * @Rest\Put("/user/update")
+     * @Rest\Put("/user/{id}")
      * @param $id
      * @param Request $request
      */
@@ -94,31 +93,31 @@ class CrudController extends Controller
             $user->setEmail($email);
             $user->setCompany($company);
             $em->flush();
-            return new View('User Updated Successfully', Response::HTTP_OK);
+            return new View('User Updated Successfully', Response::HTTP_CREATED);
         }
         elseif (!empty($name) && empty($email) && empty($company))
         {
             $user->setUserName($name);
             $em->flush();
-            return new View('User name Updated Successfully', Response::HTTP_OK, ['Content-type' => 'application/json']);
+            return new View('User name Updated Successfully', Response::HTTP_CREATED, ['Content-type' => 'application/json']);
         }
         elseif (empty($name) && !empty($email) && empty($company))
         {
             $user->setEmail($email);
             $em->flush();
-            return new View('Email Updated Successfully', Response::HTTP_OK, ['Content-type' => 'application/json']);
+            return new View('Email Updated Successfully', Response::HTTP_CREATED, ['Content-type' => 'application/json']);
         }
         elseif (empty($name) && empty($email) && !empty($company))
         {
             $user->setEmail($company);
             $em->flush();
-            return new View('Company Updated Successfully', Response::HTTP_OK, ['Content-type' => 'application/json']);
+            return new View('Company Updated Successfully', Response::HTTP_CREATED, ['Content-type' => 'application/json']);
         }
         else return new View('User name or email and company cannot be empty', Response::HTTP_NOT_ACCEPTABLE, ['Content-type' => 'application/json']);
     }
 
     /**
-     * @Rest\Delete("/user/delete")
+     * @Rest\Delete("/user/{id}")
      * @param $id
      * @param Request $request
      */
